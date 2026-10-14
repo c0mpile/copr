@@ -119,5 +119,5 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/VoiceStudio.desktop |
 %{_datadir}/icons/hicolor/512x512/apps/voicestudio-electron.png
 
 %changelog
-* Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 0.5.6-1
+* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0.5.6-1
 - Repackage the upstream release .deb

@@ -58,5 +58,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{appid}.metai
 %{_metainfodir}/%{appid}.metainfo.xml
 
 %changelog
-* Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 1.9.2-1
+* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 1.9.2-1
 - Release build tracking the latest upstream tag

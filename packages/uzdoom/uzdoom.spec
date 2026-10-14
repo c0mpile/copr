@@ -109,5 +109,5 @@ echo "INFO: %{name}:   https://forum.zdoom.org/viewtopic.php?t=81099"
 %{_datadir}/games/uzdoom/*
 
 %changelog
-* Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 5.0.3-1
+* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 5.0.3-1
 - Release build tracking the latest upstream tag

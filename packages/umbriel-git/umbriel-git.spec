@@ -66,5 +66,5 @@ sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 %systemd_user_postun umbriel.service
 
 %changelog
-* Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 0-0.1
+* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0-0.1
 - Automated git snapshot build

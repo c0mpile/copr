@@ -101,5 +101,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{appid}.metai
 %{_datadir}/icons/hicolor/*/apps/64gram.png
 
 %changelog
-* Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 1.2.10-1
+* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 1.2.10-1
 - Repackage the upstream Linux release
