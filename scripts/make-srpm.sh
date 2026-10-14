@@ -16,7 +16,7 @@ trap 'rm -rf "$work"' EXIT
 mode=${mode:-head}
 read -r ref _ < <("$root/scripts/resolve-upstream.sh" "$url" "$branch" "$mode")
 
-git clone --quiet --branch "$ref" "$url" "$work/src"
+git clone --quiet --depth 1 --branch "$ref" "$url" "$work/src"
 cd "$work/src"
 commit=$(git rev-parse HEAD)
 # Commit timestamp keeps Release monotonic across builds.
@@ -39,16 +39,23 @@ version=${version:-0}
 
 up=${pkg%-git}
 name=$up-$commit
-git archive --format=tar --prefix="$name/" HEAD | tar -x -C "$work"
-
-# Rust: vendor crates now, since the mock build has no network.
-if [[ -f Cargo.toml ]]; then
-  (cd "$work/$name" && mkdir -p .cargo && cargo vendor --locked vendor > .cargo/config.toml)
-fi
-
 mkdir -p "$work/rpm"/{SOURCES,SRPMS}
-tar -C "$work" -czf "$work/rpm/SOURCES/$name.tar.gz" "$name"
+
+if [[ -x $root/packages/$pkg/fetch-source.sh ]]; then
+  # Packages that repackage upstream release artifacts fetch their own sources.
+  "$root/packages/$pkg/fetch-source.sh" "$version" "$work/rpm/SOURCES"
+else
+  git archive --format=tar --prefix="$name/" HEAD | tar -x -C "$work"
+
+  # Rust: vendor crates now, since the mock build has no network.
+  if [[ -f Cargo.toml ]]; then
+    (cd "$work/$name" && mkdir -p .cargo && cargo vendor --locked vendor > .cargo/config.toml)
+  fi
+
+  tar -C "$work" -czf "$work/rpm/SOURCES/$name.tar.gz" "$name"
+fi
 cp "$root/packages/$pkg/"* "$work/rpm/SOURCES/" 2>/dev/null || true
+
 # BuildRequires derived from upstream's meson.build (packages/<pkg>/deps.skip lists names to ignore).
 : > "$work/buildrequires.txt"
 if [[ -f $work/$name/meson.build ]]; then
