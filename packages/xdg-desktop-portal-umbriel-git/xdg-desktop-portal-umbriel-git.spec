@@ -19,15 +19,8 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  git
 BuildRequires:  systemd-rpm-macros
-BuildRequires:  pkgconfig(sdbus-c++) >= 2.0
-BuildRequires:  pkgconfig(libpipewire-0.3)
-BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.39
-BuildRequires:  pkgconfig(libdrm)
-BuildRequires:  pkgconfig(gbm)
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(tomlplusplus)
-BuildRequires:  pkgconfig(nlohmann_json)
+# Derived from upstream meson.build at SRPM time (scripts/gen-buildrequires.py)
+# @GENERATED_BUILDREQUIRES@
 BuildRequires:  pkgconfig(gtk4) >= 4.12
 Requires:       xdg-desktop-portal
 Supplements:    umbriel

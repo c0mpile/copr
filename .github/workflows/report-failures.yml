@@ -1,0 +1,25 @@
+name: Report failed Copr builds
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install tools
+        run: dnf -y install gh git curl python3 gzip
+      - uses: actions/checkout@v4
+      - name: Report
+        env:
+          COPR_PROJECT: ${{ vars.COPR_PROJECT }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: ./scripts/report-failures.sh

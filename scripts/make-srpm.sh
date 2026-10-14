@@ -44,7 +44,15 @@ fi
 mkdir -p "$work/rpm"/{SOURCES,SRPMS}
 tar -C "$work" -czf "$work/rpm/SOURCES/$name.tar.gz" "$name"
 cp "$root/packages/$pkg/"* "$work/rpm/SOURCES/" 2>/dev/null || true
+# BuildRequires derived from upstream's meson.build (packages/<pkg>/deps.skip lists names to ignore).
+: > "$work/buildrequires.txt"
+if [[ -f $work/$name/meson.build ]]; then
+  python3 -I "$root/scripts/gen-buildrequires.py" "$work/$name" "$root/packages/$pkg/deps.skip" \
+    > "$work/buildrequires.txt"
+fi
+
 sed -e "s/@VERSION@/$version/" -e "s/@COMMIT@/$commit/" -e "s/@STAMP@/$stamp/" \
+  -e "/@GENERATED_BUILDREQUIRES@/{r $work/buildrequires.txt" -e "d}" \
   "$root/packages/$pkg/$pkg.spec" > "$work/rpm/$pkg.spec"
 
 rpmbuild -bs "$work/rpm/$pkg.spec" \

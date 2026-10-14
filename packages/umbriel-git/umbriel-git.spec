@@ -18,23 +18,9 @@ BuildRequires:  meson >= 1.3
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  git
-BuildRequires:  pkgconfig(wayland-server) >= 1.24
-BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.47
-BuildRequires:  pkgconfig(wlroots-0.20) >= 0.20.1
-BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  pkgconfig(libinput) >= 1.23
-BuildRequires:  pkgconfig(pixman-1)
-BuildRequires:  pkgconfig(tomlplusplus)
-BuildRequires:  pkgconfig(nlohmann_json)
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(pangocairo)
-BuildRequires:  pkgconfig(libdrm)
-BuildRequires:  pkgconfig(libdisplay-info)
+# Derived from upstream meson.build at SRPM time (scripts/gen-buildrequires.py)
+# @GENERATED_BUILDREQUIRES@
 BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(xcb)
-BuildRequires:  pkgconfig(xcb-icccm)
-BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  pkgconfig(xcb-render)
 BuildRequires:  pkgconfig(jemalloc)
 BuildRequires:  pkgconfig(sdbus-c++)

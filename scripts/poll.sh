@@ -12,7 +12,7 @@ while read -r pkg url branch; do
   [[ -z $pkg || $pkg == \#* ]] && continue
   head=$(git ls-remote "$url" "refs/heads/$branch" | cut -f1)
   [[ -n $head ]] || { echo "::warning::could not resolve $pkg"; continue; }
-  pkgsum=$(cat ".copr/Makefile" scripts/make-srpm.sh "packages/$pkg/"* | sha256sum | cut -c1-12)
+  pkgsum=$(cat ".copr/Makefile" scripts/make-srpm.sh scripts/gen-buildrequires.py "packages/$pkg/"* | sha256sum | cut -c1-12)
   want="$head $pkgsum"
   have=$(cat "state/$pkg" 2>/dev/null || true)
 
