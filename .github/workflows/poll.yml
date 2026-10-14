@@ -1,0 +1,47 @@
+name: Poll upstreams and trigger Copr builds
+
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # twice an hour
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild every package even if unchanged"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: [packages/**, scripts/**, .copr/**]
+
+concurrency: poll
+
+permissions:
+  contents: write
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install tools
+        run: dnf -y install copr-cli git
+      - uses: actions/checkout@v4
+      - name: Configure Copr credentials
+        run: |
+          mkdir -p ~/.config
+          printf '%s\n' "${{ secrets.COPR_CONFIG }}" > ~/.config/copr
+      - name: Poll and submit builds
+        env:
+          COPR_PROJECT: ${{ vars.COPR_PROJECT }}
+          CLONE_URL: ${{ github.server_url }}/${{ github.repository }}.git
+          PACKAGING_REF: ${{ github.ref_name }}
+          FORCE: ${{ inputs.force && '1' || '0' }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          ./scripts/poll.sh
+      - name: Record last-built state
+        run: |
+          git config user.name "copr-poller"
+          git config user.email "copr-poller@users.noreply.github.com"
+          git add state
+          git diff --cached --quiet || { git commit -m "Update build state [skip ci]"; git push; }
