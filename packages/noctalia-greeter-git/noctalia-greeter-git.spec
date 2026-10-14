@@ -40,6 +40,8 @@ BuildRequires:  pkgconfig(nlohmann_json)
 BuildRequires:  pkgconfig(wlroots-0.20)
 BuildRequires:  pkgconfig(libinput)
 BuildRequires:  pkgconfig(libwebp)
+BuildRequires:  pkgconfig(libjxl)
+BuildRequires:  pkgconfig(libjxl_threads)
 BuildRequires:  stb_image_resize2-devel
 BuildRequires:  stb_image_write-devel
 BuildRequires:  stb-devel
