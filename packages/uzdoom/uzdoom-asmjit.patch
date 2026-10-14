@@ -1,0 +1,12 @@
+diff --git a/libraries/asmjit/CMakeLists.txt b/libraries/asmjit/CMakeLists.txt
+index 4167e4c..82370f9 100644
+--- a/libraries/asmjit/CMakeLists.txt
++++ b/libraries/asmjit/CMakeLists.txt
+@@ -98,6 +98,7 @@ set(ASMJIT_SRCS
+ add_library(${ASMJITNAME} STATIC ${ASMJIT_SRCS} ${ASMJIT_PUBLIC_HDRS})
+ 
+ set_target_properties(${ASMJITNAME} PROPERTIES OUTPUT_NAME asmjit)
++target_link_libraries(${ASMJITNAME} rt)
+ 
+ if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
+     install(TARGETS ${ASMJITNAME}

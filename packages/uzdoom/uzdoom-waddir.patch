@@ -1,0 +1,13 @@
+diff --git a/src/common/platform/posix/i_system.h b/src/common/platform/posix/i_system.h
+index 3923706..0690976 100644
+--- a/src/common/platform/posix/i_system.h
++++ b/src/common/platform/posix/i_system.h
+@@ -43,7 +43,7 @@ struct FStartupSelectionInfo;
+ #ifdef __HAIKU__
+ #define SHARE_DIR "/boot/system/data"
+ #else
+-#define SHARE_DIR "/usr/share"
++#define SHARE_DIR "/usr/share/doom"
+ #endif
+ #endif
+ 
