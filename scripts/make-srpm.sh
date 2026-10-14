@@ -16,15 +16,21 @@ trap 'rm -rf "$work"' EXIT
 mode=${mode:-head}
 read -r ref _ < <("$root/scripts/resolve-upstream.sh" "$url" "$branch" "$mode")
 
-git clone --quiet --depth 1 --branch "$ref" "$url" "$work/src"
-cd "$work/src"
-commit=$(git rev-parse HEAD)
-# Commit timestamp keeps Release monotonic across builds.
-stamp=$(git show -s --format=%cd --date=format-local:%Y%m%d%H%M%S HEAD)
+if [[ -x $root/packages/$pkg/fetch-source.sh ]]; then
+  # Hook packages fetch their own sources; no need to clone the upstream repo.
+  mkdir -p "$work/src"; cd "$work/src"
+  commit=$ref; stamp=0
+else
+  git clone --quiet --depth 1 --branch "$ref" "$url" "$work/src"
+  cd "$work/src"
+  commit=$(git rev-parse HEAD)
+  # Commit timestamp keeps Release monotonic across builds.
+  stamp=$(git show -s --format=%cd --date=format-local:%Y%m%d%H%M%S HEAD)
+fi
 
 # Version: the tag in release mode, otherwise from upstream metadata (falls back to 0).
 version=
-if [[ $mode == release ]]; then
+if [[ $mode == release || $mode == ghrelease ]]; then
   version=${ref#v}
 elif [[ -f Cargo.toml ]]; then
   version=$(sed -nE '/^\[package\]/,/^\[/{s/^version *= *"([^"]+)".*/\1/p}' Cargo.toml | head -1)
