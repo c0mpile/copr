@@ -2,13 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global stamp @STAMP@
 
-Name:           xwayland-satellite
+%global up xwayland-satellite
+Name:           xwayland-satellite-git
 Version:        @VERSION@
 Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
 Summary:        Rootless Xwayland integration for any Wayland compositor
 License:        MPL-2.0 AND MIT AND Apache-2.0
 URL:            https://github.com/Supreeeme/xwayland-satellite
-Source0:        %{name}-%{commit}.tar.gz
+Provides:       xwayland-satellite = %{version}-%{release}
+Conflicts:      xwayland-satellite
+Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  cargo
@@ -24,7 +27,7 @@ xwayland-satellite grants rootless Xwayland integration to any Wayland
 compositor implementing xdg_wm_base and viewporter. Git snapshot build.
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{up}-%{commit}
 
 %build
 export CARGO_HOME=$PWD/.cargo-home

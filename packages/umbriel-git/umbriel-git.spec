@@ -2,13 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global stamp @STAMP@
 
-Name:           umbriel
+%global up umbriel
+Name:           umbriel-git
 Version:        @VERSION@
 Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
 Summary:        A Wayland compositor built on wlroots
 License:        MIT
 URL:            https://github.com/noctalia-dev/umbriel
-Source0:        %{name}-%{commit}.tar.gz
+Provides:       umbriel = %{version}-%{release}
+Conflicts:      umbriel
+Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3
 BuildRequires:  gcc-c++
@@ -46,7 +49,7 @@ Git snapshot build.
 %{_prefix}/lib/systemd/user/*
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{up}-%{commit}
 
 %build
 %meson --buildtype=release -Dtests=disabled

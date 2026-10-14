@@ -2,13 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global stamp @STAMP@
 
-Name:           noctalia-greeter
+%global up noctalia-greeter
+Name:           noctalia-greeter-git
 Version:        @VERSION@
 Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
 Summary:        greetd login screen matching the Noctalia shell
 License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia-greeter
-Source0:        %{name}-%{commit}.tar.gz
+Provides:       noctalia-greeter = %{version}-%{release}
+Conflicts:      noctalia-greeter
+Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc-c++
@@ -49,7 +52,7 @@ a bundled wlroots compositor. Git snapshot build.
 %{_prefix}/lib/tmpfiles.d/noctalia-greeter.conf
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{up}-%{commit}
 
 %build
 %meson --buildtype=release -Dtests=disabled

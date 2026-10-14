@@ -2,13 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global stamp @STAMP@
 
-Name:           noctalia
+%global up noctalia
+Name:           noctalia-git
 Version:        @VERSION@
 Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
 Summary:        A sleek, customizable desktop shell crafted for Wayland.
 License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia
-Source0:        %{name}-%{commit}.tar.gz
+Provides:       noctalia = %{version}-%{release}
+Conflicts:      noctalia
+Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc-c++
@@ -65,7 +68,7 @@ Git snapshot build.
 %{_datadir}/icons/hicolor/scalable/apps/noctalia.svg
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{up}-%{commit}
 
 %build
 %meson --buildtype=release -Dtests=disabled

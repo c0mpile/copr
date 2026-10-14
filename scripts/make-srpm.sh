@@ -32,7 +32,8 @@ fi
 version=${version%%-*}
 version=${version:-0}
 
-name=$pkg-$commit
+up=${pkg%-git}
+name=$up-$commit
 git archive --format=tar --prefix="$name/" HEAD | tar -x -C "$work"
 
 # Rust: vendor crates now, since the mock build has no network.

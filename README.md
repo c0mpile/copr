@@ -1,6 +1,6 @@
 # Git-snapshot Copr repo
 
-Packages: xwayland-satellite, umbriel, xdg-desktop-portal-umbriel, noctalia, noctalia-greeter.
+Packages (all suffixed `-git`): xwayland-satellite, umbriel, xdg-desktop-portal-umbriel, noctalia, noctalia-greeter.
 
 - `packages/upstreams.conf` – upstream repo + branch per package
 - `packages/<pkg>/<pkg>.spec` – spec templates (`@VERSION@ @COMMIT@ @STAMP@` filled in at SRPM time)

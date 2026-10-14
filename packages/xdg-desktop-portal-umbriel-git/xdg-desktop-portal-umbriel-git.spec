@@ -2,13 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global stamp @STAMP@
 
-Name:           xdg-desktop-portal-umbriel
+%global up xdg-desktop-portal-umbriel
+Name:           xdg-desktop-portal-umbriel-git
 Version:        @VERSION@
 Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
 Summary:        xdg-desktop-portal backend for the Umbriel compositor
 License:        MIT
 URL:            https://github.com/noctalia-dev/xdg-desktop-portal-umbriel
-Source0:        %{name}-%{commit}.tar.gz
+Provides:       xdg-desktop-portal-umbriel = %{version}-%{release}
+Conflicts:      xdg-desktop-portal-umbriel
+Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3
 BuildRequires:  gcc-c++
@@ -39,7 +42,7 @@ sharing). Git snapshot build.
 %{_prefix}/lib/systemd/user/*
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{up}-%{commit}
 
 %build
 %meson --buildtype=release 
