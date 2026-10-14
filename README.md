@@ -5,7 +5,7 @@ Packages (all suffixed `-git`): xwayland-satellite, umbriel, xdg-desktop-portal-
 - `packages/upstreams.conf` – upstream repo + branch per package
 - `packages/<pkg>/<pkg>.spec` – spec templates (`@VERSION@ @COMMIT@ @STAMP@` filled in at SRPM time)
 - `.copr/Makefile` + `scripts/make-srpm.sh` – Copr `make_srpm` hook: clones upstream HEAD, vendors crates (Rust), emits an SRPM
-- `.github/workflows/poll.yml` – runs at :07 and :37, submits a Copr build for any package whose upstream HEAD (or packaging files) changed since `state/<pkg>`
+- `.github/workflows/poll.yml` – runs every 2 hours (at :07), submits a Copr build for any package whose upstream HEAD (or packaging files) changed since `state/<pkg>`
 
 ## Setup
 1. Create the Copr account, get the API config from https://copr.fedorainfracloud.org/api/
