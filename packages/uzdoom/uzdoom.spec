@@ -16,6 +16,7 @@ Provides:       qzdoom = 1.3.0
 Provides:       gzdoom = %{version}
 Provides:       bundled(re2c) = 0.16.0
 Provides:       bundled(gdtoa)
+Provides:       bundled(zmusic)
 
 Patch1:         %{name}-waddir.patch
 Patch2:         %{name}-asmjit.patch
@@ -27,7 +28,6 @@ BuildRequires:  tar
 BuildRequires:  git
 BuildRequires:  nasm
 BuildRequires:  glew-devel
-BuildRequires:  zmusic-devel
 BuildRequires:  timidity++
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(flac)
@@ -52,7 +52,6 @@ Requires:       wildmidi
 Requires:       openal-soft
 Requires:       fluidsynth
 Requires:       SDL2
-Requires:       zmusic
 Recommends:     freedoom
 
 %description
