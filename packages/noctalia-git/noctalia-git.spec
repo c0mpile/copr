@@ -4,8 +4,8 @@
 
 %global up noctalia
 Name:           noctalia-git
-Version:        @VERSION@
-Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
+Version:        @VERSION@^%{stamp}git%{shortcommit}
+Release:        1%{?dist}
 Summary:        A sleek, customizable desktop shell crafted for Wayland.
 License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia

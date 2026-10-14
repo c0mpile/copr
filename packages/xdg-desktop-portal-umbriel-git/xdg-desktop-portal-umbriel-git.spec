@@ -4,8 +4,8 @@
 
 %global up xdg-desktop-portal-umbriel
 Name:           xdg-desktop-portal-umbriel-git
-Version:        @VERSION@
-Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
+Version:        @VERSION@^%{stamp}git%{shortcommit}
+Release:        1%{?dist}
 Summary:        xdg-desktop-portal backend for the Umbriel compositor
 License:        MIT
 URL:            https://github.com/noctalia-dev/xdg-desktop-portal-umbriel

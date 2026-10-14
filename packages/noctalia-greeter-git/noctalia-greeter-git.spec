@@ -4,8 +4,8 @@
 
 %global up noctalia-greeter
 Name:           noctalia-greeter-git
-Version:        @VERSION@
-Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
+Version:        @VERSION@^%{stamp}git%{shortcommit}
+Release:        1%{?dist}
 Summary:        greetd login screen matching the Noctalia shell
 License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia-greeter

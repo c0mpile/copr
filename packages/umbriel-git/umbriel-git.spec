@@ -4,8 +4,8 @@
 
 %global up umbriel
 Name:           umbriel-git
-Version:        @VERSION@
-Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
+Version:        @VERSION@^%{stamp}git%{shortcommit}
+Release:        1%{?dist}
 Summary:        A Wayland compositor built on wlroots
 License:        MIT
 URL:            https://github.com/noctalia-dev/umbriel

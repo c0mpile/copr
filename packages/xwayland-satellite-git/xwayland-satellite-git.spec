@@ -4,8 +4,8 @@
 
 %global up xwayland-satellite
 Name:           xwayland-satellite-git
-Version:        @VERSION@
-Release:        0.1.%{stamp}git%{shortcommit}%{?dist}
+Version:        @VERSION@^%{stamp}git%{shortcommit}
+Release:        1%{?dist}
 Summary:        Rootless Xwayland integration for any Wayland compositor
 License:        MPL-2.0 AND MIT AND Apache-2.0
 URL:            https://github.com/Supreeeme/xwayland-satellite
