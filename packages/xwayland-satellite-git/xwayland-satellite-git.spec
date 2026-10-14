@@ -16,6 +16,7 @@ Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  cargo
+BuildRequires:  systemd-rpm-macros
 BuildRequires:  rust
 BuildRequires:  clang-devel
 BuildRequires:  pkgconfig(xcb)

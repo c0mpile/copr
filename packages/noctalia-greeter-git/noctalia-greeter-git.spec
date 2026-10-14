@@ -64,7 +64,7 @@ a bundled wlroots compositor. Git snapshot build.
 sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %build
-%meson --buildtype=release -Dtests=disabled
+%meson --buildtype=release -Db_pie=true
 %meson_build
 
 %install
