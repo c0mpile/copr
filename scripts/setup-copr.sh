@@ -4,8 +4,8 @@
 set -euo pipefail
 proj=$1; url=$2
 copr-cli create "${proj#*/}" \
-  --chroot fedora-44-x86_64 --chroot fedora-44-aarch64 \
-  --chroot fedora-rawhide-x86_64 --chroot fedora-rawhide-aarch64 \
+  --chroot fedora-44-x86_64 --chroot fedora-45-x86_64 \
+  --chroot fedora-rawhide-x86_64 \
   --description "Git snapshot builds of xwayland-satellite, umbriel, xdg-desktop-portal-umbriel, noctalia, noctalia-greeter"
 while read -r pkg _; do
   [[ -z $pkg || $pkg == \#* ]] && continue
