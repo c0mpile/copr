@@ -16,6 +16,8 @@ Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3
 BuildRequires:  gcc-c++
+BuildRequires:  cmake
+BuildRequires:  git
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  pkgconfig(sdbus-c++) >= 2.0
 BuildRequires:  pkgconfig(libpipewire-0.3)
@@ -38,12 +40,16 @@ sharing). Git snapshot build.
 %license LICENSE
 %doc README.md
 %{_libexecdir}/*
-%{_datadir}/xdg-desktop-portal/
+%{_datadir}/xdg-desktop-portal/portals/umbriel.portal
+%config %{_datadir}/xdg-desktop-portal/umbriel-portals.conf
 %{_datadir}/dbus-1/services/*
-%{_prefix}/lib/systemd/user/*
+%{_userunitdir}/*
 
 %prep
 %autosetup -n %{up}-%{commit}
+
+# Upstream tarball has no .git; stamp the commit into the version string
+sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %build
 %meson --buildtype=release 
@@ -51,6 +57,15 @@ sharing). Git snapshot build.
 
 %install
 %meson_install
+
+%post
+%systemd_user_post xdg-desktop-portal-umbriel.service
+
+%preun
+%systemd_user_preun xdg-desktop-portal-umbriel.service
+
+%postun
+%systemd_user_postun xdg-desktop-portal-umbriel.service
 
 %changelog
 * Wed Oct 14 2026 c0mpile <16279275+c0mpile@users.noreply.github.com> - 0-0.1
