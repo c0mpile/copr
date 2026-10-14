@@ -11,6 +11,7 @@ License:        MIT
 URL:            https://github.com/noctalia-dev/xdg-desktop-portal-umbriel
 Provides:       xdg-desktop-portal-umbriel = %{version}-%{release}
 Conflicts:      xdg-desktop-portal-umbriel
+Conflicts:      xdg-desktop-portal-umbriel-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3

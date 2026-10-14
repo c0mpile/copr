@@ -11,6 +11,7 @@ License:        MIT
 URL:            https://github.com/noctalia-dev/umbriel
 Provides:       umbriel = %{version}-%{release}
 Conflicts:      umbriel
+Conflicts:      umbriel-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3

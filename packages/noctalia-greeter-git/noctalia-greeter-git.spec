@@ -11,6 +11,7 @@ License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia-greeter
 Provides:       noctalia-greeter = %{version}-%{release}
 Conflicts:      noctalia-greeter
+Conflicts:      noctalia-greeter-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson

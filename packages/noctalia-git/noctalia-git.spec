@@ -11,6 +11,7 @@ License:        MIT
 URL:            https://github.com/noctalia-dev/noctalia
 Provides:       noctalia = %{version}-%{release}
 Conflicts:      noctalia
+Conflicts:      noctalia-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson

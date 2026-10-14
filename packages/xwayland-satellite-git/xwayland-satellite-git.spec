@@ -11,6 +11,7 @@ License:        MPL-2.0 AND MIT AND Apache-2.0
 URL:            https://github.com/Supreeeme/xwayland-satellite
 Provides:       xwayland-satellite = %{version}-%{release}
 Conflicts:      xwayland-satellite
+Conflicts:      xwayland-satellite-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
