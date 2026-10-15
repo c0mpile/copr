@@ -7,7 +7,7 @@ pkg=$1
 outdir=$(realpath "$2")
 root=$(cd "$(dirname "$0")/.." && pwd)
 
-read -r _ url branch mode < <(grep -E "^${pkg}[[:space:]]" "$root/packages/upstreams.conf")
+read -r _ url branch mode _ < <(grep -E "^${pkg}[[:space:]]" "$root/packages/upstreams.conf")
 [[ -n ${url:-} ]] || { echo "unknown package $pkg" >&2; exit 1; }
 
 work=$(mktemp -d)
