@@ -1,11 +1,13 @@
 #!/usr/bin/bash
 # Resolve what to build for an upstream.
-# Usage: resolve-upstream.sh <url> <branch> [head|release|ghrelease]
+# Usage: resolve-upstream.sh <url> <branch> [head|release|ghrelease|pinned]
 # Prints "<ref to clone> <identifier>":
 #   head:    branch name + commit sha of the branch tip
 #   release: highest dotted-version tag (5.0.3, v1.2) twice; rolling/pre-release tags are ignored
 #   ghrelease: tag of the repo's latest non-prerelease GitHub release (for repos whose tags are not
 #              a clean version sequence); read from the /releases/latest redirect, no API needed
+#   pinned:  the tag given in the branch column, fixed until edited (for dependencies that
+#            must stay at a known-good version)
 set -euo pipefail
 url=$1; branch=${2:--}; mode=${3:-head}
 
@@ -25,5 +27,8 @@ case $mode in
     tag=${final##*/releases/tag/}
     [[ $final == */releases/tag/* && -n $tag ]] || exit 1
     echo "$tag $tag" ;;
+  pinned)
+    [[ $branch != - ]] || exit 1
+    echo "$branch $branch" ;;
   *) echo "unknown mode $mode" >&2; exit 2 ;;
 esac

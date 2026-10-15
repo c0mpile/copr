@@ -1,6 +1,8 @@
 # Git-snapshot Copr repo
 
-Packages (all suffixed `-git`): xwayland-satellite, umbriel, xdg-desktop-portal-umbriel, noctalia, noctalia-greeter.
+Packages live in `c0mpile/builds` (Fedora: the `-git` snapshots plus uzdoom, voicestudio, doomrunner, 64gram) and `c0mpile/el10` (EL10: unar).
+
+EL10 has no GCC Objective-C compiler, so `unar` is built with clang against the GNUstep runtime, which the `el10` project also builds: `libobjc2`, `gnustep-make`, `gnustep-base`. These are pinned to a version in `upstreams.conf` (`pinned` mode, version in the branch column) and built in file order, each after the previous. A package can name its own Copr project in the 5th column of `upstreams.conf`.
 
 - `packages/upstreams.conf` – upstream repo + branch per package
 - `packages/<pkg>/<pkg>.spec` – spec templates (`@VERSION@ @COMMIT@ @STAMP@` filled in at SRPM time)

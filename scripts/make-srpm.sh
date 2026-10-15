@@ -30,7 +30,7 @@ fi
 
 # Version: the tag in release mode, otherwise from upstream metadata (falls back to 0).
 version=
-if [[ $mode == release || $mode == ghrelease ]]; then
+if [[ $mode == release || $mode == ghrelease || $mode == pinned ]]; then
   version=${ref#v}
 elif [[ -f Cargo.toml ]]; then
   version=$(sed -nE '/^\[package\]/,/^\[/{s/^version *= *"([^"]+)".*/\1/p}' Cargo.toml | head -1)

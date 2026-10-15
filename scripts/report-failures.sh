@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${COPR_PROJECT:?}"
-owner=${COPR_PROJECT%/*}; proj=${COPR_PROJECT#*/}
+default_project=$COPR_PROJECT
 api=https://copr.fedorainfracloud.org/api_3
 label=copr-build-failure
 
@@ -13,8 +13,10 @@ gh label create "$label" --color B60205 --description "Automated: Copr build fai
 
 json() { python3 -I -c "import json,sys; d=json.load(sys.stdin); $1"; }
 
-while read -r pkg _; do
+while read -r pkg _ _ _ project; do
   [[ -z $pkg || $pkg == \#* ]] && continue
+  COPR_PROJECT=${project:-$default_project}
+  owner=${COPR_PROJECT%/*}; proj=${COPR_PROJECT#*/}
 
   # Latest build that has finished one way or the other.
   read -r id state < <(curl -fsS "$api/build/list/?ownername=$owner&projectname=$proj&packagename=$pkg&limit=10&order=id&order_type=DESC" |
