@@ -14,7 +14,7 @@ AutoReqProv:    no
 
 Name:           voicestudio
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Local voice cloning, voice design, dubbing and transcription desktop app
 License:        AGPL-3.0-only AND MIT AND BSD-3-Clause
 URL:            https://github.com/debpalash/VoiceStudio
@@ -93,6 +93,8 @@ mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/voicestudio-electron <<'LAUNCHER'
 #!/bin/sh
 export VOICESTUDIO_DISABLE_UPDATER=1
+# Fedora's uv config disables Python downloads, but the app sets up its own managed Python 3.11.
+export UV_PYTHON_DOWNLOADS=automatic
 exec /opt/VoiceStudio/voicestudio-electron "$@"
 LAUNCHER
 chmod 0755 %{buildroot}%{_bindir}/voicestudio-electron
@@ -119,5 +121,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/VoiceStudio.desktop |
 %{_datadir}/icons/hicolor/512x512/apps/voicestudio-electron.png
 
 %changelog
+* Thu Oct 15 2026 c0mpile <c0mpile@disroot.org> - 0.5.6-2
+- Allow uv to download its managed Python; Fedora's uv config disables that and the first-run setup failed
+
 * Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0.5.6-1
 - Repackage the upstream release .deb
