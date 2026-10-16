@@ -18,6 +18,18 @@ newest_state() {
     python3 -I -c "import json,sys; i=json.load(sys.stdin)['items']; print(i[0]['state'] if i else 'none')" 2>/dev/null || echo unknown
 }
 
+# Chroots that failed in the newest build of a package, as "--chroot X" arguments. Empty when the
+# failure happened before any chroot started (SRPM stage), which means rebuild everything.
+failed_chroot_args() {
+  local api=https://copr.fedorainfracloud.org/api_3 id c state
+  id=$(curl -fsS --retry 3 "$api/build/list/?ownername=${1%/*}&projectname=${1#*/}&packagename=$2&limit=1&order=id&order_type=DESC" |
+    python3 -I -c "import json,sys; print(json.load(sys.stdin)['items'][0]['id'])" 2>/dev/null) || return 0
+  for c in $(curl -fsS --retry 3 "$api/build/$id" | python3 -I -c "import json,sys; print(' '.join(json.load(sys.stdin)['chroots']))" 2>/dev/null); do
+    state=$(curl -fsS --retry 3 "$api/build-chroot/$id/$c" | python3 -I -c "import json,sys; print(json.load(sys.stdin)['state'])" 2>/dev/null) || continue
+    [[ $state != failed ]] || printf -- '--chroot %s ' "$c"
+  done
+}
+
 while read -r pkg url branch mode project; do
   [[ -z $pkg || $pkg == \#* ]] && continue
   read -r _ head < <(scripts/resolve-upstream.sh "$url" "$branch" "${mode:-head}") || true
@@ -26,7 +38,7 @@ while read -r pkg url branch mode project; do
   want="$head $pkgsum"
   have=$(cat "state/$pkg" 2>/dev/null || true)
 
-  retry=0; tries=0
+  retry=0; tries=0; chroots=()
   if [[ ${FORCE:-0} != 1 && $want == "$have" ]]; then
     # Already submitted for this version. Builds can fail for reasons outside our control (Copr
     # builder timeouts), so resubmit when the newest build failed, a few times per version.
@@ -35,7 +47,9 @@ while read -r pkg url branch mode project; do
     [[ $rw == "$want" ]] && tries=${rn:-0}
     if [[ $(newest_state "${project:-$COPR_PROJECT}" "$pkg") == failed && $tries -lt $MAX_RETRIES ]]; then
       retry=1
-      echo "$pkg: newest build failed, retrying ($((tries + 1))/$MAX_RETRIES)"
+      # shellcheck disable=SC2207
+      chroots=($(failed_chroot_args "${project:-$COPR_PROJECT}" "$pkg"))
+      echo "$pkg: newest build failed, retrying ($((tries + 1))/$MAX_RETRIES) ${chroots[*]}"
     else
       echo "$pkg: up to date ($head)"
       continue
@@ -45,7 +59,7 @@ while read -r pkg url branch mode project; do
   fi
   after=()
   [[ -z ${project:-} || -z ${last[${project:-}]:-} ]] || after=(--after-build-id "${last[$project]}")
-  out=$(copr-cli buildscm "${project:-$COPR_PROJECT}" --nowait "${after[@]}" \
+  out=$(copr-cli buildscm "${project:-$COPR_PROJECT}" --nowait "${after[@]}" "${chroots[@]}" \
     --clone-url "$CLONE_URL" --commit "${PACKAGING_REF:-main}" \
     --method make_srpm --spec "packages/$pkg/$pkg.spec")
   echo "$out"
