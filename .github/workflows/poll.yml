@@ -2,7 +2,7 @@ name: Poll upstreams and trigger Copr builds
 
 on:
   schedule:
-    - cron: "7 */2 * * *"   # every 2 hours
+    - cron: "4,19,34,49 * * * *"   # every 15 minutes (GitHub drops many scheduled runs, so ask often)
   workflow_dispatch:
     inputs:
       force:

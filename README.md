@@ -9,7 +9,7 @@ EL10 has no GCC Objective-C compiler, so `unar` is built with clang against the 
 - `.copr/Makefile` + `scripts/make-srpm.sh` – Copr `make_srpm` hook: clones upstream HEAD, vendors crates (Rust), emits an SRPM
 - `.github/workflows/report-failures.yml` + `scripts/report-failures.sh` – hourly: opens a GitHub issue when a package's latest finished Copr build failed (with the error lines), closes it when a later build succeeds
 - `scripts/gen-buildrequires.py` – derives `BuildRequires` from upstream `meson.build` at SRPM time (`packages/<pkg>/deps.skip` lists names to ignore); specs keep only hand-written extras
-- `.github/workflows/poll.yml` – runs every 2 hours (at :07), submits a Copr build for any package whose upstream HEAD (or packaging files) changed since `state/<pkg>`
+- `.github/workflows/poll.yml` – is scheduled every 15 minutes (GitHub often skips or delays scheduled runs, so real runs are less frequent), submits a Copr build for any package whose upstream HEAD (or packaging files) changed since `state/<pkg>`
 
 ## Setup
 1. Create the Copr account, get the API config from https://copr.fedorainfracloud.org/api/
