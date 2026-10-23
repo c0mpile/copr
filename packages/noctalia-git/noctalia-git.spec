@@ -45,7 +45,7 @@ Git snapshot build.
 %doc README.md
 %{_bindir}/noctalia
 %{_datadir}/noctalia/
-%{_datadir}/applications/dev.noctalia.Noctalia.desktop
+%{_datadir}/applications/dev.noctalia.Noctalia*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/noctalia.svg
 
 %prep
@@ -68,7 +68,7 @@ find third_party -type f \( -name "LICENSE*" -o -name "COPYING*" -o -name "NOTIC
 done
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/dev.noctalia.Noctalia.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/dev.noctalia.Noctalia*.desktop
 
 %changelog
 * Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0-0.1
