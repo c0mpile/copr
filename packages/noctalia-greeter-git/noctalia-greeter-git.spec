@@ -25,7 +25,6 @@ BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(glesv2)
 BuildRequires:  stb_image_resize2-devel
 BuildRequires:  stb_image_write-devel
-BuildRequires:  stb-devel
 Requires:       greetd
 Requires:       dbus
 Requires:       wlroots >= 0.20
