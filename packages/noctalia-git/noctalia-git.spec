@@ -39,14 +39,10 @@ Recommends:     power-profiles-daemon
 A sleek, customizable desktop shell crafted for Wayland (Noctalia v5).
 Git snapshot build.
 
-%files
+%files -f %{_builddir}/%{name}.files
 %license LICENSE
 %{_licensedir}/%{name}/third_party/
 %doc README.md
-%{_bindir}/noctalia
-%{_datadir}/noctalia/
-%{_datadir}/applications/dev.noctalia.Noctalia*.desktop
-%{_datadir}/icons/hicolor/scalable/apps/noctalia.svg
 
 %prep
 %autosetup -n %{up}-%{commit}
@@ -66,6 +62,11 @@ find third_party -type f \( -name "LICENSE*" -o -name "COPYING*" -o -name "NOTIC
     install -d "$dest_dir"
     install -p -m 0644 "$file" "$dest_dir/"
 done
+
+# Package whatever upstream installs, so new files (desktop entries, icons, ...)
+# don't fail the build as unpackaged
+find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_licensedir}/*' -printf '/%%P\n' > %{_builddir}/%{name}.files
+find %{buildroot}%{_datadir} -type d -path '%{buildroot}%{_datadir}/noctalia*' -printf '%%dir %{_datadir}/%%P\n' >> %{_builddir}/%{name}.files
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/dev.noctalia.Noctalia*.desktop

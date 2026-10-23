@@ -34,13 +34,10 @@ BuildRequires:  polkit
 A greetd login screen that matches the look of the Noctalia shell, running in
 a bundled wlroots compositor. Git snapshot build.
 
-%files
+%files -f %{_builddir}/%{name}.files
 %license LICENSE
 %{_licensedir}/%{name}/third_party/
 %doc README.md
-%{_bindir}/*
-%{_datadir}/noctalia-greeter/
-%{_datadir}/polkit-1/actions/*
 
 %prep
 %autosetup -n %{up}-%{commit}
@@ -62,6 +59,11 @@ find third_party -type f \( -name "LICENSE*" -o -name "COPYING*" -o -name "NOTIC
     install -d "$dest_dir"
     install -p -m 0644 "$file" "$dest_dir/"
 done
+
+# Package whatever upstream installs, so new files (desktop entries, icons, ...)
+# don't fail the build as unpackaged
+find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_licensedir}/*' -printf '/%%P\n' > %{_builddir}/%{name}.files
+find %{buildroot}%{_datadir} -type d -path '%{buildroot}%{_datadir}/noctalia*' -printf '%%dir %{_datadir}/%%P\n' >> %{_builddir}/%{name}.files
 
 %changelog
 * Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0-0.1

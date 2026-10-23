@@ -73,6 +73,8 @@ sed -e "s/@VERSION@/$version/" -e "s/@COMMIT@/$commit/" -e "s/@STAMP@/$stamp/" \
   -e "/@GENERATED_BUILDREQUIRES@/{r $work/buildrequires.txt" -e "d}" \
   "$root/packages/$pkg/$pkg.spec" > "$work/rpm/$pkg.spec"
 
+"$root/scripts/prune-buildrequires.sh" "$work/rpm/$pkg.spec"
+
 rpmbuild -bs "$work/rpm/$pkg.spec" \
   --define "_topdir $work/rpm" --define "_sourcedir $work/rpm/SOURCES" \
   --define "_srcrpmdir $outdir"
