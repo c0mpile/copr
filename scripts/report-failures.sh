@@ -52,6 +52,8 @@ else:
       [[ -n $num ]] || continue
       echo "$pkg: build $id succeeded, closing #$num"
       gh issue close "$num" --comment "Build $id succeeded: https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/" >/dev/null
+      notify "Copr build recovered: $pkg (build $id)
+https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/"
     done <<< "$open"
     continue
   fi
