@@ -22,4 +22,6 @@ jobs:
           COPR_PROJECT: ${{ vars.COPR_PROJECT }}
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: ./scripts/report-failures.sh

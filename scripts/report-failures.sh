@@ -11,6 +11,14 @@ label=copr-build-failure
 
 gh label create "$label" --color B60205 --description "Automated: Copr build failed" --force >/dev/null
 
+# Optional Telegram message; needs TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID, otherwise skipped.
+notify() {
+  [[ -n ${TELEGRAM_BOT_TOKEN:-} && -n ${TELEGRAM_CHAT_ID:-} ]] || return 0
+  curl -fsS -o /dev/null "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+    --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" --data-urlencode "text=${1:0:3900}" \
+    --data-urlencode disable_web_page_preview=true || echo "telegram notification failed" >&2
+}
+
 json() { python3 -I -c "import json,sys; d=json.load(sys.stdin); $1"; }
 
 while read -r pkg _ _ _ project; do
@@ -65,4 +73,7 @@ else:
   gh issue create --label "$label" --title "$title" --body "Build: https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/
 $details
 Opened automatically; it closes itself when a later build of $pkg succeeds."
+  notify "Copr build failed: $pkg (build $id)
+https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/
+$(sed -e 's/\*\*//g' -e '/^```/d' <<< "$details" | head -20)"
 done < packages/upstreams.conf
