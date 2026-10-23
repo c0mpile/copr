@@ -66,7 +66,7 @@ done
 # Package whatever upstream installs, so new files (desktop entries, icons, ...)
 # don't fail the build as unpackaged
 find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_licensedir}/*' -printf '/%%P\n' > %{_builddir}/%{name}.files
-find %{buildroot}%{_datadir} -type d -path '%{buildroot}%{_datadir}/noctalia*' -printf '%%dir %{_datadir}/%%P\n' >> %{_builddir}/%{name}.files
+find %{buildroot}%{_datadir} -type d -path '%{buildroot}%{_datadir}/noctalia*' -printf '%%%%dir %{_datadir}/%%P\n' >> %{_builddir}/%{name}.files
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/dev.noctalia.Noctalia*.desktop
