@@ -19,6 +19,14 @@ notify() {
     --data-urlencode disable_web_page_preview=true || echo "telegram notification failed" >&2
 }
 
+if [[ ${TEST_TELEGRAM:-false} == true ]]; then
+  [[ -n ${TELEGRAM_BOT_TOKEN:-} && -n ${TELEGRAM_CHAT_ID:-} ]] || { echo "Telegram secrets are not set" >&2; exit 1; }
+  curl -sS "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+    --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" --data-urlencode "text=Copr build notifier test" |
+    python3 -I -c "import json,sys; d=json.load(sys.stdin); print('telegram ok' if d['ok'] else 'telegram error %s: %s' % (d['error_code'], d['description'])); sys.exit(0 if d['ok'] else 1)"
+  exit
+fi
+
 json() { python3 -I -c "import json,sys; d=json.load(sys.stdin); $1"; }
 
 while read -r pkg _ _ _ project; do

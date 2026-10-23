@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 * * * *"
   workflow_dispatch:
+    inputs:
+      test_telegram:
+        description: Send a test Telegram message and exit
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -24,4 +29,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TEST_TELEGRAM: ${{ inputs.test_telegram }}
         run: ./scripts/report-failures.sh
