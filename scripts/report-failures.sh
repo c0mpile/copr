@@ -57,7 +57,7 @@ else:
       fix=$(gh pr list --state merged --search "\"$pkg: fix Copr build $failed\" in:title" --limit 1 --json url,body --jq '.[] | .url + "\n" + .body' || true)
       steps=""
       if [[ -n $fix ]]; then
-        steps=$'\n\n'"Fixed by automated PR: $(head -1 <<< "$fix")"$'\n'"$(sed -n '/^## What the agent did/,$p' <<< "$fix" | sed 1d | head -40)"
+        steps=$'\n\n'"Fixed by automated PR: $(head -1 <<< "$fix")"$'\n'"$(sed -n '/^## What the agent did/,$p' <<< "$fix" | sed -e 1d -e 's/^    //' -e '/^$/d' | head -40)"
       fi
       notify "Copr build recovered: $pkg (build $id)
 https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/$steps"
