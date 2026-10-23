@@ -29,14 +29,10 @@ Supplements:    umbriel
 xdg-desktop-portal backend for the Umbriel compositor (screen capture and
 sharing). Git snapshot build.
 
-%files
+%files -f %{_builddir}/%{name}.files
 %license LICENSE
 %doc README.md
-%{_libexecdir}/*
-%{_datadir}/xdg-desktop-portal/portals/umbriel.portal
 %config %{_datadir}/xdg-desktop-portal/umbriel-portals.conf
-%{_datadir}/dbus-1/services/*
-%{_userunitdir}/*
 
 %prep
 %autosetup -n %{up}-%{commit}
@@ -50,6 +46,8 @@ sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %install
 %meson_install
+# Package whatever upstream installs, so new files don't fail the build as unpackaged
+find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_datadir}/xdg-desktop-portal/umbriel-portals.conf' -printf '/%%P\n' > %{_builddir}/%{name}.files
 
 %post
 %systemd_user_post xdg-desktop-portal-umbriel.service
