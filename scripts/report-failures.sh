@@ -52,8 +52,15 @@ else:
       [[ -n $num ]] || continue
       echo "$pkg: build $id succeeded, closing #$num"
       gh issue close "$num" --comment "Build $id succeeded: https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/" >/dev/null
+      # If an autofix PR was merged for the failed build, say what the agent did.
+      failed=${t##*(build }; failed=${failed%)}
+      fix=$(gh pr list --state merged --search "\"$pkg: fix Copr build $failed\" in:title" --limit 1 --json url,body --jq '.[] | .url + "\n" + .body' || true)
+      steps=""
+      if [[ -n $fix ]]; then
+        steps=$'\n\n'"Fixed by automated PR: $(head -1 <<< "$fix")"$'\n'"$(sed -n '/^## What the agent did/,$p' <<< "$fix" | sed 1d | head -40)"
+      fi
       notify "Copr build recovered: $pkg (build $id)
-https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/"
+https://copr.fedorainfracloud.org/coprs/$COPR_PROJECT/build/$id/$steps"
     done <<< "$open"
     continue
   fi
