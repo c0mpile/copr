@@ -16,14 +16,30 @@ Source0:        %{up}-%{commit}.tar.gz
 
 BuildRequires:  meson >= 1.3
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
+BuildRequires:  ninja-build
 BuildRequires:  git
 BuildRequires:  systemd-rpm-macros
 # Derived from upstream meson.build at SRPM time (scripts/gen-buildrequires.py)
 # @GENERATED_BUILDREQUIRES@
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(gbm)
+BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gtk4) >= 4.12
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libpipewire-0.3)
+BuildRequires:  pkgconfig(nlohmann_json)
+BuildRequires:  pkgconfig(sdbus-c++) >= 2.0
+BuildRequires:  pkgconfig(tomlplusplus)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-protocols) >= 1.39
+BuildRequires:  /usr/bin/wayland-scanner
+
 Requires:       xdg-desktop-portal
+Requires:       pipewire
+Provides:       xdg-desktop-portal-umbriel = %{version}-%{release}
+Conflicts:      xdg-desktop-portal-umbriel
 Supplements:    umbriel
+Supplements:    umbriel-git
 
 %description
 xdg-desktop-portal backend for the Umbriel compositor (screen capture and
@@ -33,6 +49,11 @@ sharing). Git snapshot build.
 %license LICENSE
 %doc README.md
 %config %{_datadir}/xdg-desktop-portal/umbriel-portals.conf
+%{_libexecdir}/xdg-desktop-portal-umbriel
+%{_libexecdir}/umbriel-share-picker
+%{_datadir}/xdg-desktop-portal/portals/umbriel.portal
+%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.umbriel.service
+%{_userunitdir}/xdg-desktop-portal-umbriel.service
 
 %prep
 %autosetup -n %{up}-%{commit}
@@ -41,7 +62,7 @@ sharing). Git snapshot build.
 sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %build
-%meson --buildtype=release 
+%meson -Dpicker=enabled
 %meson_build
 
 %install
@@ -56,7 +77,7 @@ find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_d
 %systemd_user_preun xdg-desktop-portal-umbriel.service
 
 %postun
-%systemd_user_postun xdg-desktop-portal-umbriel.service
+%systemd_user_postun_with_restart xdg-desktop-portal-umbriel.service
 
 %changelog
 * Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0-0.1
