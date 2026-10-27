@@ -14,13 +14,11 @@ Conflicts:      xdg-desktop-portal-umbriel
 Conflicts:      xdg-desktop-portal-umbriel-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
-BuildRequires:  meson >= 1.3
-BuildRequires:  gcc-c++
-BuildRequires:  ninja-build
+
 BuildRequires:  git
-BuildRequires:  systemd-rpm-macros
-# Derived from upstream meson.build at SRPM time (scripts/gen-buildrequires.py)
-# @GENERATED_BUILDREQUIRES@
+BuildRequires:  gcc-c++
+BuildRequires:  meson >= 1.3
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -33,6 +31,7 @@ BuildRequires:  pkgconfig(tomlplusplus)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-protocols) >= 1.39
 BuildRequires:  /usr/bin/wayland-scanner
+BuildRequires:  systemd-rpm-macros
 
 Requires:       xdg-desktop-portal
 Requires:       pipewire
