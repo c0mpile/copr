@@ -14,25 +14,60 @@ Conflicts:      noctalia-greeter
 Conflicts:      noctalia-greeter-nightly
 Source0:        %{up}-%{commit}.tar.gz
 
-BuildRequires:  meson
+BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
+BuildRequires:  meson
+BuildRequires:  ninja-build
+BuildRequires:  stb_image_resize2-devel
 BuildRequires:  git
 # Derived from upstream meson.build at SRPM time (scripts/gen-buildrequires.py)
 # @GENERATED_BUILDREQUIRES@
 BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(cairo-ft)
 BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(glesv2)
-BuildRequires:  stb_image_resize2-devel
-BuildRequires:  stb_image_write-devel
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(libjxl)
+BuildRequires:  pkgconfig(libjxl_threads)
+BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(libwebp)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(nlohmann_json)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(pangocairo)
+BuildRequires:  pkgconfig(pangoft2)
+BuildRequires:  pkgconfig(tomlplusplus)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(wayland-server)
+BuildRequires:  pkgconfig(wlroots-0.20)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  /usr/bin/wayland-scanner
+BuildRequires:  systemd-rpm-macros
+
 Requires:       greetd
-Requires:       dbus
-Requires:       wlroots >= 0.20
-BuildRequires:  polkit
+Requires:       dbus-daemon
+Recommends:     polkit
+Provides:       noctalia-greeter = %{version}-%{release}
+Provides:       bundled(wuffs)
+Conflicts:      noctalia-greeter
 
 %description
-A greetd login screen that matches the look of the Noctalia shell, running in
-a bundled wlroots compositor. Git snapshot build.
+A minimal login greeter for greetd that matches the look and feel of Noctalia
+Shell. Ships its own wlroots-based kiosk compositor.
+
+Point greetd at it in /etc/greetd/config.toml:
+
+  [default_session]
+  command = "/usr/bin/noctalia-greeter-session"
+  user = "greetd"
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE
@@ -41,12 +76,13 @@ a bundled wlroots compositor. Git snapshot build.
 
 %prep
 %autosetup -n %{up}-%{commit}
+sed -i 's/ greeter greeter / greetd greetd /' data/tmpfiles.d/noctalia-greeter.conf
 
 # Upstream tarball has no .git; stamp the commit into the version string
 sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %build
-%meson --buildtype=release -Db_pie=true
+%meson -Dc_args="%{build_cflags} -Wno-error=switch"
 %meson_build
 
 %install
@@ -66,5 +102,4 @@ find %{buildroot} -mindepth 1 \( -type f -o -type l \) ! -path '%{buildroot}%{_l
 find %{buildroot}%{_datadir} -type d -path '%{buildroot}%{_datadir}/noctalia*' -printf '%%%%dir %{_datadir}/%%P\n' >> %{_builddir}/%{name}.files
 
 %changelog
-* Wed Oct 14 2026 c0mpile <c0mpile@disroot.org> - 0-0.1
-- Automated git snapshot build
+%autochangelog
