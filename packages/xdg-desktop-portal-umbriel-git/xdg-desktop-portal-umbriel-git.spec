@@ -61,7 +61,7 @@ sharing). Git snapshot build.
 sed -i "s/'unknown'/'%{shortcommit}'/g" meson.build
 
 %build
-%meson -Dpicker=enabled
+%meson -Dpicker=enabled -Dtests=false
 %meson_build
 
 %install
