@@ -16,6 +16,7 @@ BuildRequires:  make
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  qt6-qtbase-devel
+BuildRequires:  autofix-test-nonexistent-devel
 BuildRequires:  pkgconfig(minizip)
 
 %description
