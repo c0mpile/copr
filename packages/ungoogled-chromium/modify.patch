@@ -161,7 +161,7 @@ index 7529529..9b42aa0 100644
  
 -Name:	chromium
 +Name:	ungoogled-chromium
- Version: 156.0.8078.73
+ Version: @VERSION@
  Release: 1%{?dist}
 -Summary: A WebKit (Blink) powered web browser that Google doesn't want you to use
 -Url: http://www.chromium.org/Home

@@ -16,7 +16,8 @@ git -C chromium checkout --detach @FEDORA_COMMIT@
 rpkg --path ./chromium sources
 
 # Patch the spec file to build with the ungoogled-chromium patches
-patch -d ./chromium -p1 < packaging/packages/ungoogled-chromium/modify.patch
+ver=$(sed -nE 's/^Version:[[:space:]]*([0-9.]+).*/\1/p' ./chromium/chromium.spec | head -1)
+sed -e "s/@VERSION@/$ver/g" packaging/packages/ungoogled-chromium/modify.patch | patch -d ./chromium -p1
 
 # Rename files that are called chromium-browser to ungoogled-chromium to avoid name clashes
 patch -d ./chromium -p1 < packaging/packages/ungoogled-chromium/rename.patch

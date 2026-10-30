@@ -44,8 +44,10 @@ for p in "${patches[@]}"; do
   fi
 done
 
+ver=$(sed -nE 's/^Version:[[:space:]]*([0-9.]+).*/\1/p' chromium.spec 2>/dev/null | head -1 || true)
+
 for p in "${patches[@]}"; do
-  out=$(patch -p1 -F0 --no-backup-if-mismatch < "$root/packages/$pkg/$p" 2>&1) || {
+  out=$(sed -e "s/@VERSION@/$ver/g" "$root/packages/$pkg/$p" | patch -p1 -F0 --no-backup-if-mismatch 2>&1) || {
     echo "$p does not apply:"
     grep -vE '^patching file|^Hunk #[0-9]+ succeeded' <<< "$out" | head -60
     exit 1

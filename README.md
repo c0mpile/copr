@@ -17,10 +17,11 @@ EL10 has no GCC Objective-C compiler, so `unar` is built with clang against the 
 ### Patch drift (ungoogled-chromium)
 Before submitting an ungoogled-chromium build, `poll.sh` dry-runs `modify.patch`, `rename.patch` and `use-system-python.patch` (`scripts/check-patches.sh`) against the Fedora commit it would build. If they don't apply, no build is submitted and the previous build stays; `poll.sh` leaves `state/ungoogled-chromium.patchfail` (the failing commit, a timestamp and the patch output) and `state/ungoogled-chromium.fedora/` (Fedora's unmodified files that the patches touch, at that commit, plus Chromium's `.gn` for `use-system-python.patch`). `report-failures.sh` then opens a `copr-build-failure` issue titled `Copr build failed: ungoogled-chromium (build <timestamp>)` and sends the Telegram message; the autofix agent picks it up like any other build failure.
 
-To fix it, edit the hunks of `packages/ungoogled-chromium/modify.patch` (and `rename.patch` or `use-system-python.patch` if needed) so they apply to `state/ungoogled-chromium.fedora/`; keep every other change. Do not touch `state/`. Verify with (the agent sandbox has `patch` but no network):
+To fix it, edit the hunks of `packages/ungoogled-chromium/modify.patch` (and `rename.patch` or `use-system-python.patch` if needed) so they apply to `state/ungoogled-chromium.fedora/`; keep every other change (`modify.patch` uses `@VERSION@` for the `Version:` context line). Do not touch `state/`. Verify with (the agent sandbox has `patch` but no network):
 
     rm -rf /tmp/t && cp -a state/ungoogled-chromium.fedora /tmp/t && cd /tmp/t
-    patch -p1 --dry-run < /work/packages/ungoogled-chromium/modify.patch   # then apply it for real
+    ver=$(sed -nE 's/^Version:[[:space:]]*([0-9.]+).*/\1/p' chromium.spec | head -1)
+    sed "s/@VERSION@/$ver/g" /work/packages/ungoogled-chromium/modify.patch | patch -p1 --dry-run   # then apply it for real
     patch -p1 --dry-run < /work/packages/ungoogled-chromium/rename.patch
     patch -p1 --dry-run < /work/packages/ungoogled-chromium/use-system-python.patch
 
