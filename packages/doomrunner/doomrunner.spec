@@ -25,8 +25,6 @@ presets for multi-file modifications, allowing one-click switching between
 them. Release build.
 
 %prep
-# autofix test: intentional failure
-test -e /nonexistent-autofix-test-file
 %autosetup -n %{up}-%{commit}
 
 %build
