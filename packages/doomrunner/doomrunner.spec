@@ -16,7 +16,6 @@ BuildRequires:  make
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  qt6-qtbase-devel
-BuildRequires:  autofix-test-nonexistent-devel
 BuildRequires:  pkgconfig(minizip)
 
 %description
@@ -26,6 +25,8 @@ presets for multi-file modifications, allowing one-click switching between
 them. Release build.
 
 %prep
+# autofix test: intentional failure
+test -e /nonexistent-autofix-test-file
 %autosetup -n %{up}-%{commit}
 
 %build
