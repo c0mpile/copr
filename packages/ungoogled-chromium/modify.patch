@@ -115,7 +115,7 @@ index 7529529..9b42aa0 100644
  %endif
  
  # Fix installation issue caused by the hard link in locales
-@@ -48,13 +51,13 @@
+@@ -48,24 +51,24 @@
  %endif
  
  # enable|disable chromedriver
@@ -131,6 +131,19 @@ index 7529529..9b42aa0 100644
  %if 0%{?flatpak}
  %global build_headless 0
  %endif
+ 
+ # Temporarily disable system_esbuild by default for the epel build
+ # re-enable it once esbuild has been updated
+ %global system_esbuild 1
+ %global esbuild_version 0.28.2
+-%if 0%{?rhel}
+-%global system_esbuild 1
++%if 0%{?rhel} == 9
++%global system_esbuild 0
+ %endif
+ 
+ # set nodejs_version
+ %global nodejs_version v22.22.0
 @@ -146,8 +149,8 @@
  %undefine _debugsource_packages
  %endif
